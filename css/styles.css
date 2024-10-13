@@ -8218,6 +8218,10 @@ textarea.form-control-lg {
 
 /* rtl:end:remove */
 
+.text-description {
+  text-align: justify;
+}
+
 .text-chocolate {
   color: #8B4513
 }
