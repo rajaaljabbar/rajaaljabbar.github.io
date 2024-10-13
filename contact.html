@@ -81,24 +81,17 @@
             </div>
             <div class="row gx-5 justify-content-center">
               <div class="col-lg-8 col-xl-6">
-                <!-- * * * * * * * * * * * * * * *-->
-                <!-- * * SB Forms Contact Form * *-->
-                <!-- * * * * * * * * * * * * * * *-->
-                <!-- This form is pre-integrated with SB Forms.-->
-                <!-- To make this form functional, sign up at-->
-                <!-- https://startbootstrap.com/solution/contact-forms-->
-                <!-- to get an API token!-->
-                <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                <form id="contactForm" name="portfolio-form">
                   <!-- Name input-->
                   <div class="form-floating mb-3">
                     <input
                       class="form-control"
-                      id="name"
                       type="text"
                       placeholder="Enter your name..."
                       data-sb-validations="required"
+                      name="nama"
                     />
-                    <label for="name">Full name</label>
+                    <label for="name">Type Your Name</label>
                     <div
                       class="invalid-feedback"
                       data-sb-feedback="name:required"
@@ -110,12 +103,12 @@
                   <div class="form-floating mb-3">
                     <input
                       class="form-control"
-                      id="email"
                       type="email"
                       placeholder="name@example.com"
                       data-sb-validations="required,email"
+                      name="email"
                     />
-                    <label for="email">Email address</label>
+                    <label for="email">Email</label>
                     <div
                       class="invalid-feedback"
                       data-sb-feedback="email:required"
@@ -137,8 +130,9 @@
                       type="tel"
                       placeholder="(123) 456-7890"
                       data-sb-validations="required"
+                      name="hp"
                     />
-                    <label for="phone">Phone number</label>
+                    <label for="phone">Phone Number</label>
                     <div
                       class="invalid-feedback"
                       data-sb-feedback="phone:required"
@@ -155,8 +149,9 @@
                       placeholder="Enter your message here..."
                       style="height: 10rem"
                       data-sb-validations="required"
+                      name="pesan"
                     ></textarea>
-                    <label for="message">Message</label>
+                    <label for="pesan">Message</label>
                     <div
                       class="invalid-feedback"
                       data-sb-feedback="message:required"
@@ -164,41 +159,50 @@
                       A message is required.
                     </div>
                   </div>
-                  <!-- Submit success message-->
-                  <!---->
-                  <!-- This is what your users will see when the form-->
-                  <!-- has successfully submitted-->
-                  <div class="d-none" id="submitSuccessMessage">
-                    <div class="text-center mb-3">
-                      <div class="fw-bolder">Form submission successful!</div>
-                      To activate this form, sign up at
-                      <br />
-                      <a
-                        href="https://startbootstrap.com/solution/contact-forms"
-                        >https://startbootstrap.com/solution/contact-forms</a
-                      >
-                    </div>
-                  </div>
-                  <!-- Submit error message-->
-                  <!---->
                   <!-- This is what your users will see when there is-->
                   <!-- an error submitting the form-->
-                  <div class="d-none" id="submitErrorMessage">
+                  <!-- <div class="error-alert d-none" id="submitErrorMessage">
                     <div class="text-center text-danger mb-3">
                       Error sending message!
                     </div>
-                  </div>
+                  </div> -->
                   <!-- Submit Button-->
                   <div class="d-grid">
                     <button
-                      class="btn btn-chocolate btn-lg disabled"
-                      id="submitButton"
                       type="submit"
+                      class="btn btn-chocolate btn-kirim btn-lg"
+                      disabled
                     >
                       Submit
                     </button>
+
+                    <button
+                      class="btn btn-chocolate btn-loading d-none"
+                      type="button"
+                      disabled
+                    >
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Loading...
+                    </button>
                   </div>
                 </form>
+
+                <div
+                  class="alert alert-warning alert-dismissible fade show mt-3 d-none my-alert"
+                  role="alert"
+                >
+                  <strong>Thank You!</strong> We Have Received Your Message
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
               </div>
             </div>
           </div>
@@ -239,10 +243,120 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
-    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-    <!-- * *                               SB Forms JS                               * *-->
-    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+    <!-- Contact Form JS -->
+    <script>
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycbyOiOwqJPq5GUM6jy0_MFzbA3JArTwceGaIRf_pniQftIeAAUHV_SgzFk7kf0CZ3u0S5A/exec";
+      const form = document.forms["portfolio-form"];
+      const btnKirim = document.querySelector(".btn-kirim");
+      const btnLoading = document.querySelector(".btn-loading");
+      const myAlert = document.querySelector(".my-alert");
+      const errorAlert = document.querySelector(".error-alert");
+      const btnSubmit = document.querySelector(".btn-kirim");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // Ketika tombol submit di klik
+        // tampilkan tombol loading hilangkan tombol kirim
+        btnLoading.classList.toggle("d-none");
+        btnKirim.classList.toggle("d-none");
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => {
+            // tampilkan tombol kirim, hilangkan tombol loading
+            btnLoading.classList.toggle("d-none");
+            btnKirim.classList.toggle("d-none");
+            // Tampilkan Alert
+            myAlert.classList.toggle("d-none");
+            // Reset Form
+            form.reset();
+
+            // Kembali disable tombol submit setelah form di-reset
+            checkFormValidity();
+
+            console.log("Success!", response);
+          })
+          .catch((error) => console.error("Error!", error.message));
+      });
+
+      // Ambil elemen input form
+      const nameInput = document.querySelector('input[name="nama"]');
+      const emailInput = document.querySelector('input[name="email"]');
+      const phoneInput = document.querySelector('input[name="hp"]');
+      const messageInput = document.querySelector('textarea[name="pesan"]');
+
+      // Fungsi untuk mengecek apakah semua input sudah terisi
+      function checkFormValidity() {
+        const isNameValid = nameInput.value.trim() !== "";
+        const isEmailValid =
+          /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(
+            emailInput.value
+          );
+        const isPhoneValid = phoneInput.value.trim() !== "";
+        const isMessageValid = messageInput.value.trim() !== "";
+
+        // Jika semua input valid, tombol submit diaktifkan, jika tidak, dinonaktifkan
+        if (isNameValid && isEmailValid && isPhoneValid && isMessageValid) {
+          btnSubmit.disabled = false;
+        } else {
+          btnSubmit.disabled = true;
+        }
+      }
+
+      // Event listener untuk memantau perubahan di input form
+      [nameInput, emailInput, phoneInput, messageInput].forEach((input) => {
+        input.addEventListener("input", checkFormValidity);
+      });
+
+      // Jalankan fungsi saat pertama kali halaman dimuat
+      document.addEventListener("DOMContentLoaded", checkFormValidity);
+    </script>
+
+    <script>
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form from submitting automatically
+          let isValid = true;
+
+          // Name validation
+          const nameInput = document.querySelector('input[name="nama"]');
+          if (!nameInput.value) {
+            nameInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            nameInput.classList.remove("is-invalid");
+          }
+
+          // Email validation
+          const emailInput = document.querySelector('input[name="email"]');
+          const emailPattern =
+            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+          if (!emailInput.value || !emailPattern.test(emailInput.value)) {
+            emailInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            emailInput.classList.remove("is-invalid");
+          }
+
+          // Phone validation
+          const phoneInput = document.querySelector('input[name="hp"]');
+          if (!phoneInput.value) {
+            phoneInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            phoneInput.classList.remove("is-invalid");
+          }
+
+          // Message validation
+          const messageInput = document.querySelector('textarea[name="pesan"]');
+          if (!messageInput.value) {
+            messageInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            messageInput.classList.remove("is-invalid");
+          }
+        });
+    </script>
   </body>
 </html>
