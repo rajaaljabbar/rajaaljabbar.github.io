@@ -2,8 +2,7 @@
   "use strict";
 
   const CONTACT_EMAIL = "rajaaljabbar1@gmail.com";
-
-  const WEB3FORMS_ACCESS_KEY = window.WEB3FORMS_ACCESS_KEY || "__WEB3FORMS_KEY__";
+  const WEB3FORMS_ACCESS_KEY = atob("ZGU4ZTdhMmYtNWRjYi00MTMyLTg2ZDgtYTliNTA4YWQ5ZDE1");
 
   const t = (text) => (window.PRA_I18N ? window.PRA_I18N.tr(text) : text);
   const isEnglish = () => !!window.PRA_I18N && window.PRA_I18N.lang === "en";
