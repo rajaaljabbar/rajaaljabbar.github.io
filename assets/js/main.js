@@ -279,6 +279,17 @@
       const wib = new Date(now.getTime() + 7 * 60 * 60 * 1000);
       ts.textContent = wib.toISOString().slice(0, 19) + "+07:00";
     }
+    const ver = document.getElementById("kernel-version");
+    if (ver) {
+      fetch("https://api.github.com/repos/rajaaljabbar/rajaaljabbar.github.io/actions/runs?per_page=1")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          if (d && d.workflow_runs && d.workflow_runs[0] && d.workflow_runs[0].run_number) {
+            ver.textContent = "v2.1." + d.workflow_runs[0].run_number;
+          }
+        })
+        .catch(() => {});
+    }
   }
 
   document.addEventListener("DOMContentLoaded", () => {

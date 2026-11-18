@@ -27,7 +27,7 @@ jobs:
           W3F_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
         run: |
           touch assets/js/config.local.js
-          sed -i "s/pra-kernel@v[^ ]*/pra-kernel@v2.1.${{ github.run_number }}/g" index.html
+          sed -i "s/id=\"kernel-version\">v[^<]*/id=\"kernel-version\">v2.1.${{ github.run_number }}/g" index.html
           if [ -n "$W3F_KEY" ]; then
             sed -i "s/__WEB3FORMS_KEY__/$W3F_KEY/g" assets/js/main.js
           fi
