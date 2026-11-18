@@ -1,4 +1,4 @@
-# Putra Raja Aljabbar — Portfolio (`pra-kernel@v2.0.0`)
+# Putra Raja Aljabbar — Portfolio (`pra-kernel@v2.1.0`)
 
 **Live Website:** [https://rajaaljabbar.github.io](https://rajaaljabbar.github.io)
 
@@ -30,6 +30,9 @@ Personal portfolio of **Putra Raja Aljabbar** — IT Support & Infrastructure Sp
 ```
 
 ## Changelog
+
+### `v2.1.0` (2026-11-18)
+- Linked the **Internal IT Asset Management & Ticketing System** card and STAR architecture modal directly to [`rajaaljabbar/it_inventory`](https://github.com/rajaaljabbar/it_inventory).
 
 ### `v2.0.0` (2026-11-18)
 - Added bilingual language toggle (`EN` / `ID`) in header and mobile navigation with `EN` as the default language while preserving technical IT terminology in `ID` mode.
