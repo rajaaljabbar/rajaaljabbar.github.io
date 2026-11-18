@@ -1,16 +1,13 @@
-/* Portfolio interactions — Putra Raja Aljabbar */
 (function () {
   "use strict";
 
   const CONTACT_EMAIL = "rajaaljabbar1@gmail.com";
 
-  /* Translate a string into the active UI language (see i18n.js); falls back to the input. */
+  const WEB3FORMS_ACCESS_KEY = window.WEB3FORMS_ACCESS_KEY || "__WEB3FORMS_KEY__";
+
   const t = (text) => (window.PRA_I18N ? window.PRA_I18N.tr(text) : text);
   const isEnglish = () => !!window.PRA_I18N && window.PRA_I18N.lang === "en";
 
-  /* ------------------------------------------------------------------ */
-  /* Toast                                                              */
-  /* ------------------------------------------------------------------ */
   let toastTimer;
   function showToast(message) {
     const toast = document.getElementById("toast");
@@ -21,9 +18,6 @@
     toastTimer = setTimeout(() => toast.classList.remove("show"), 3500);
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Typewriter in hero terminal                                        */
-  /* ------------------------------------------------------------------ */
   const phrases = [
     "ping -c 4 enterprise-core.net ... 0% loss",
     "docker compose up -d ... containers healthy",
@@ -58,9 +52,6 @@
     setTimeout(typeLoop, speed);
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Copy email                                                         */
-  /* ------------------------------------------------------------------ */
   function fallbackCopy(text) {
     const ta = document.createElement("textarea");
     ta.value = text;
@@ -68,7 +59,7 @@
     ta.style.opacity = "0";
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand("copy"); } catch (e) { /* ignore */ }
+    try { document.execCommand("copy"); } catch (e) {  }
     document.body.removeChild(ta);
   }
 
@@ -92,9 +83,6 @@
     });
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Project modals                                                     */
-  /* ------------------------------------------------------------------ */
   let lastFocused = null;
 
   function openProjectModal(id) {
@@ -124,13 +112,13 @@
     document.querySelectorAll("[data-close-modal]").forEach((btn) => {
       btn.addEventListener("click", () => closeProjectModal(btn.dataset.closeModal));
     });
-    // Click on the dim backdrop closes the modal
+
     document.querySelectorAll("[data-modal]").forEach((modal) => {
       modal.addEventListener("click", (e) => {
         if (e.target === modal) closeProjectModal(modal.id);
       });
     });
-    // Escape closes any open modal; Tab is trapped inside the open modal
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         document.querySelectorAll("[data-modal]:not(.hidden)").forEach((m) => closeProjectModal(m.id));
@@ -156,9 +144,6 @@
     });
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Mobile menu                                                        */
-  /* ------------------------------------------------------------------ */
   function setupMobileMenu() {
     const toggle = document.getElementById("mobile-menu-toggle");
     const menu = document.getElementById("mobile-menu");
@@ -178,9 +163,6 @@
     });
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Scroll spy (highlights active nav link)                            */
-  /* ------------------------------------------------------------------ */
   function setupScrollSpy() {
     const links = Array.from(document.querySelectorAll("[data-nav-link]"));
     const sections = links
@@ -212,39 +194,83 @@
     sections.forEach((s) => observer.observe(s));
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Contact form -> opens the visitor's email client (mailto)          */
-  /* ------------------------------------------------------------------ */
   function setupContactForm() {
     const form = document.getElementById("contact-form");
     if (!form) return;
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const name = form.elements["name"].value.trim();
-      const email = form.elements["email"].value.trim();
-      const subjectSelect = form.elements["subject"];
-      const subjectLabel = subjectSelect.options[subjectSelect.selectedIndex].text;
-      const message = form.elements["message"].value.trim();
 
-      const subject = "[Portfolio] " + subjectLabel;
+    function openMailtoFallback(name, email, subject, message) {
       const body = message + "\n\n--\n" + (isEnglish() ? "Name: " : "Nama: ") + name + "\nEmail: " + email;
       window.location.href =
         "mailto:" + CONTACT_EMAIL +
         "?subject=" + encodeURIComponent(subject) +
         "&body=" + encodeURIComponent(body);
+    }
 
+    function showFeedback(text, isError) {
       const feedback = document.getElementById("form-feedback");
-      if (feedback) {
-        feedback.classList.remove("hidden");
-        setTimeout(() => feedback.classList.add("hidden"), 5000);
+      if (!feedback) return;
+      feedback.textContent = text;
+      feedback.classList.toggle("text-red-600", !!isError);
+      feedback.classList.toggle("text-emerald-700", !isError);
+      feedback.classList.remove("hidden");
+      setTimeout(() => feedback.classList.add("hidden"), 6000);
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (form.elements["botcheck"] && form.elements["botcheck"].checked) return;
+
+      const name = form.elements["name"].value.trim();
+      const email = form.elements["email"].value.trim();
+      const subjectSelect = form.elements["subject"];
+      const subjectLabel = subjectSelect.options[subjectSelect.selectedIndex].text;
+      const message = form.elements["message"].value.trim();
+      const subject = "[Portfolio] " + subjectLabel;
+
+      const submitBtn = document.getElementById("contact-submit");
+      const submitLabel = document.getElementById("contact-submit-label");
+
+      if (WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY.trim() !== "" && !WEB3FORMS_ACCESS_KEY.includes("__WEB3FORMS_KEY__")) {
+        if (submitBtn) submitBtn.disabled = true;
+        if (submitLabel) submitLabel.textContent = t("Sending...");
+        try {
+          const res = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              access_key: WEB3FORMS_ACCESS_KEY.trim(),
+              subject,
+              from_name: "Portfolio — " + name,
+              name,
+              email,
+              category: subjectLabel,
+              message
+            })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showFeedback(t("✓ Message transmitted successfully! I will reply to your email shortly."), false);
+            form.reset();
+          } else {
+            throw new Error((data && data.message) || "Submission failed");
+          }
+        } catch (err) {
+          openMailtoFallback(name, email, subject, message);
+          showFeedback(t("✓ Opening your email app to send the message…"), false);
+          form.reset();
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
+          if (submitLabel) submitLabel.textContent = t("Send via Terminal");
+        }
+        return;
       }
+
+      openMailtoFallback(name, email, subject, message);
+      showFeedback(t("✓ Opening your email app to send the message…"), false);
       form.reset();
     });
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Footer dynamic values                                              */
-  /* ------------------------------------------------------------------ */
   function setupFooter() {
     const year = document.getElementById("year");
     if (year) year.textContent = new Date().getFullYear();
@@ -256,7 +282,6 @@
     }
   }
 
-  /* ------------------------------------------------------------------ */
   document.addEventListener("DOMContentLoaded", () => {
     setTimeout(typeLoop, 800);
     setupCopyEmail();

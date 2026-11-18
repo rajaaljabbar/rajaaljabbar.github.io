@@ -1,18 +1,11 @@
-/* Bilingual (EN / ID) content switcher — Putra Raja Aljabbar portfolio (v2.0.0).
- *
- * Default language: English ("en").
- * Indonesian ("id") translates narrative sentences and UI controls while keeping
- * standard IT / infrastructure terminology in English.
- */
 (function () {
   "use strict";
 
   const DEFAULT_LANG = "en";
   const STORAGE_KEY = "pra-lang";
 
-  /* [ID, EN] — only narrative prose & UI controls; IT badges/terms stay in English in both modes. */
   const PAIRS = [
-    /* ---- Header / UI controls ---- */
+
     ["Unduh CV", "Download CV"],
     ["Navigasi utama", "Main navigation"],
     ["Navigasi mobile", "Mobile navigation"],
@@ -20,7 +13,6 @@
     ["Bahasa", "Language"],
     ["Foto profil", "Profile photo"],
 
-    /* ---- Hero ---- */
     ["Spesialis Infrastruktur IT dengan rekam jejak", "IT Infrastructure Specialist with a track record of"],
     ["7+ tahun", "7+ years"],
     [
@@ -30,10 +22,8 @@
     ["Lihat Proyek", "View Projects"],
     ["Unduh CV (PDF)", "Download CV (PDF)"],
 
-    /* ---- Stats ---- */
     ["7+ Tahun", "7+ Years"],
 
-    /* ---- Tech stack ---- */
     ["Spesialisasi & Core Tech Stack", "Specialization & Core Tech Stack"],
     [
       "Infrastruktur tingkat enterprise, orkestrasi virtualisasi, dan ekosistem rekayasa web modern.",
@@ -56,7 +46,6 @@
       "Relational database integrity management, real-time telemetry, authentication systems, and security governance."
     ],
 
-    /* ---- Projects: section + cards ---- */
     ["Proyek Unggulan & Arsitektur", "Featured Projects & Architecture"],
     [
       "Solusi nyata infrastruktur enterprise, otomatisasi jaringan, dan sistem internal berskala produksi.",
@@ -114,7 +103,6 @@
       "Mass laptop deployment and network infrastructure for national exam computer labs in Nganjuk"
     ],
 
-    /* ---- Experience ---- */
     ["Riwayat Karier & Pengalaman Kerja", "Career History & Work Experience"],
     [
       "Lintasan dukungan infrastruktur, tata kelola aset IT, pabrik manufaktur, dan multimedia.",
@@ -173,7 +161,6 @@
       "Led the mass deployment and network installation of 100+ laptops for educational laboratories in Nganjuk Regency, completing the project 100% on schedule for national exams."
     ],
 
-    /* ---- Contact ---- */
     ["Hubungi Saya", "Contact Me"],
     [
       "Terbuka untuk posisi full-time IT Support, IT Infrastructure Specialist, Network Engineer, Sysadmin, maupun proyek arsitektur jaringan & web custom.",
@@ -194,9 +181,10 @@
       "Describe your technical needs, architecture, or position offer..."
     ],
     ["✓ Membuka aplikasi email Anda untuk mengirim pesan…", "✓ Opening your email app to send the message…"],
+    ["✓ Pesan berhasil dikirim! Saya akan segera membalas ke email Anda.", "✓ Message transmitted successfully! I will reply to your email shortly."],
+    ["Mengirim...", "Sending..."],
     ["Kirim via Terminal", "Send via Terminal"],
 
-    /* ---- Modals (STAR) ---- */
     ["Tutup Terminal", "Close Terminal"],
     ["Tutup", "Close"],
     ["Akses Repository GitHub", "Access GitHub Repository"],
@@ -210,7 +198,6 @@
     ["• Keamanan Jaringan Terpusat", "• Centralized Network Security"],
     ["Enterprise Wi-Fi & Multi-SSID dengan FreeRADIUS & UniFi", "Enterprise Wi-Fi & Multi-SSID with FreeRADIUS & UniFi"],
 
-    /* Modal 1 — Asset management */
     [
       "Pencatatan inventaris aset IT perusahaan sebelumnya dilakukan secara manual, menyebabkan kendala pelacakan saat audit internal dan keterlambatan dalam merespons tiket keluhan pengguna.",
       "Recording of the company's IT asset inventory was previously done manually, causing tracking difficulties during internal audits and delays in responding to user complaint tickets."
@@ -228,7 +215,6 @@
       "The system streamlined tracking of all corporate IT assets, significantly accelerated complaint ticket response, and unified device history in a single dashboard aligned with the General Affairs (GA) department's operations."
     ],
 
-    /* Modal 2 — Wi-Fi / RADIUS */
     [
       "Terdapat kebutuhan mendesak untuk meningkatkan keamanan perimeter jaringan perusahaan, mengatasi kerentanan akses statis, dan memulihkan stabilitas jaringan pasca insiden keamanan.",
       "There was an urgent need to improve the company's network perimeter security, address static-access vulnerabilities, and restore network stability after a security incident."
@@ -246,7 +232,6 @@
       "Wireless network security reached banking-grade standards with no VLAN leakage, departing employees' accounts can be revoked instantly, and network recovery (failover) runs automatically."
     ],
 
-    /* Modal 3 — ESXi cluster */
     [
       "Kebutuhan infrastruktur server yang tangguh untuk menjalankan berbagai layanan krusial tanpa bergantung pada satu mesin bare-metal individual yang rentan jika terjadi kerusakan perangkat keras.",
       "A resilient server infrastructure was needed to run several critical services without depending on a single bare-metal machine that is vulnerable to hardware failure."
@@ -264,7 +249,6 @@
       "Achieved secure system isolation, optimized data center power consumption, and high operational uptime (99.95%) with a recovery time objective (RTO) under 15 minutes."
     ],
 
-    /* Modal 4 — LED / broadcast */
     [
       "Klien korporat besar membutuhkan implementasi sistem display LED berskala raksasa beresolusi tinggi untuk fasilitas krusial seperti ruang meeting eksekutif (BOD) dan Network Operations Center (NOC) yang menuntut pemantauan data real-time.",
       "A large corporate client required a large-scale, high-resolution LED display system for critical facilities such as executive meeting rooms (BOD) and a Network Operations Center (NOC) that demands real-time data monitoring."
@@ -282,7 +266,6 @@
       "The LED screen systems ran stably with very low latency and zero blackouts, ensuring smooth centralized network monitoring and seamless executive presentation transitions."
     ],
 
-    /* Modal VPN */
     [
       "Operasional perusahaan membutuhkan akses data yang aman antar Head Office dan kantor cabang, namun konektivitas sering terganggu akibat putusnya salah satu jalur internet dari ISP (Single Point of Failure).",
       "Company operations required secure data access between the Head Office and branch offices, but connectivity was often disrupted when one of the ISP internet links went down (a Single Point of Failure)."
@@ -300,7 +283,6 @@
       "A secure and stable cross-branch internal communication path was established. Operational downtime dropped drastically thanks to a failover system that runs automatically without manual intervention."
     ],
 
-    /* Modal 6 — Nganjuk */
     [
       "Laboratorium komputer di beberapa titik SMP Kabupaten Nganjuk harus segera beroperasi dengan infrastruktur IT yang memenuhi standar kelayakan untuk pelaksanaan Ujian Nasional berskala besar dalam tenggat waktu yang sangat ketat.",
       "Computer labs at several junior high school (SMP) sites in Nganjuk Regency had to become operational quickly, with IT infrastructure meeting the readiness standard for large-scale National Exams under a very tight deadline."
@@ -318,14 +300,12 @@
       "The hardware and network installation project was completed 100% on schedule. All laboratories functioned optimally with no network disconnection incidents throughout the National Exam period."
     ],
 
-    /* ---- Meta ---- */
     [
       "Portfolio Putra Raja Aljabbar — IT Infrastructure Specialist & AI-Augmented Builder (Bogor - Jakarta) dengan 7+ tahun pengalaman networking, virtualisasi, dan kepatuhan ISO 27001.",
       "Portfolio of Putra Raja Aljabbar — IT Infrastructure Specialist & AI-Augmented Builder (Bogor - Jakarta) with 7+ years of experience in networking, virtualization, and ISO 27001 compliance."
     ]
   ];
 
-  /* ------------------------------------------------------------------ */
   const norm = (s) => s.replace(/\s+/g, " ").trim();
   const toEn = new Map();
   const toId = new Map();
@@ -352,7 +332,7 @@
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved === "en" || saved === "id") return saved;
-    } catch (e) { /* storage unavailable */ }
+    } catch (e) {  }
     return DEFAULT_LANG;
   }
 
@@ -409,11 +389,10 @@
 
   function setLang(lang) {
     if (lang !== "en" && lang !== "id") return;
-    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {  }
     apply(lang);
   }
 
-  /* Translate a single string (any language) into the active language — used by main.js. */
   function tr(text) {
     return translate(text, current);
   }

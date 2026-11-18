@@ -1,4 +1,3 @@
-/* Tailwind CDN configuration — must be loaded AFTER the Tailwind CDN script. */
 tailwind.config = {
   darkMode: "class",
   theme: {
@@ -45,7 +44,7 @@ tailwind.config = {
         margin: "3rem",
         "gutter-mobile": "1rem",
         "margin-mobile": "1.25rem",
-        88: "22rem" /* used by sm:w-88 / sm:h-88 on the hero avatar */
+        88: "22rem"
       },
       fontFamily: {
         "headline-lg": ["Geist", "sans-serif"],
