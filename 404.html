@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex"/>
+<title>404 | Putra Raja Aljabbar</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/logo.svg"/>
+<style>
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:#f8fafc; font-family: ui-monospace, "JetBrains Mono", monospace; color:#0f172a; padding:1.25rem; }
+  .box { max-width:32rem; width:100%; background:#0f172a; color:#e2e8f0; border-radius:.75rem; padding:1.5rem; box-shadow:0 20px 40px rgba(15,23,42,.2); }
+  .g { color:#34d399; } .c { color:#22d3ee; } .r { color:#f87171; }
+  a { display:inline-block; margin-top:1rem; padding:.5rem 1rem; border-radius:.5rem; background:#0891b2; color:#fff; text-decoration:none; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="box">
+  <p><span class="g">raja@infra:~$</span> <span class="c">curl -I $URL</span></p>
+  <p class="r">HTTP/1.1 404 Not Found</p>
+  <p id="msg">The page you are looking for could not be found.</p>
+  <a id="back" href="./">cd ~ (back to home)</a>
+</div>
+<script>
+  (function () {
+    var lang = "en";
+    try { lang = localStorage.getItem("pra-lang") || "en"; } catch (e) {}
+    if (lang === "id") {
+      document.documentElement.lang = "id";
+      document.getElementById("msg").textContent = "Halaman yang Anda cari tidak ditemukan.";
+      document.getElementById("back").textContent = "cd ~ (kembali ke beranda)";
+    }
+  })();
+</script>
+</body>
+</html>
